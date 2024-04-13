@@ -1,6 +1,7 @@
 package com.group5.rent_n_drive
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,10 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     val categories = listOf("Compact", "Sport", "Luxury", "SUV")
     val carsByCategory = categories.map { category ->
         cars.filter { it.type == category }
@@ -34,12 +36,16 @@ fun HomeScreen() {
                 contentPadding = PaddingValues(horizontal = 8.dp)
             ) {
                 items(carsByCategory[index]) { car ->
-                    CarCard(car)
+                    CarCard(car = car, onCarClick = { selectedCar ->
+                        // Navigate to the booking screen with the selected car
+                        navController.navigate("booking/${selectedCar.id}")
+                    })
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun CategoryHeader(category: String) {
@@ -52,11 +58,12 @@ fun CategoryHeader(category: String) {
 }
 
 @Composable
-fun CarCard(car: Car) {
+fun CarCard(car: Car, onCarClick: (Car) -> Unit) {
     Column(
         modifier = Modifier
             .width(150.dp)
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable { onCarClick(car) }, // Make the card clickable
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
@@ -70,8 +77,8 @@ fun CarCard(car: Car) {
     }
 }
 
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen()
-}
+//@Preview
+//@Composable
+//fun HomeScreenPreview() {
+//    HomeScreen()
+//}
