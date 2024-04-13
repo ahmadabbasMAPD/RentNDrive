@@ -149,6 +149,13 @@ fun AppNavigator() {
             val car = cars.find { it.id == carId }
             if (car != null) ConfirmationScreen(car = car)
         }
+        composable("booking/{carId}") { backStackEntry ->
+            val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
+            val car = cars.find { it.id == carId }
+            if (car != null) BookingScreen(car = car, onBook = { selectedCar ->
+                navController.navigate("confirmation/${selectedCar.id}")
+            })
+        }
     }
 }
 
