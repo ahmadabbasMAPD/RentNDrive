@@ -22,7 +22,7 @@ import coil.compose.rememberImagePainter
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    val categories = listOf("Compact", "Sport", "Luxury", "SUV")
+    val categories = listOf("Compact", "Sport", "Sedan", "SUV")
     val carsByCategory = categories.map { category ->
         cars.filter { it.type == category }
     }
