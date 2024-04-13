@@ -1,5 +1,6 @@
 package com.group5.rent_n_drive
 
+import BookingScreen
 import androidx.activity.compose.setContent
 
 //
@@ -73,42 +74,18 @@ import androidx.navigation.compose.rememberNavController
 import com.group5.rent_n_drive.ui.theme.RentNDriveTheme
 
 // Import for LoginScreen, HomeScreen, BookingScreen, and ConfirmationScreen
-import com.group5.rent_n_drive.LoginScreen
-import com.group5.rent_n_drive.HomeScreen
-import com.group5.rent_n_drive.BookingScreen
-import com.group5.rent_n_drive.ConfirmationScreen
 
 // Import for Car data class
-import com.group5.rent_n_drive.Car
 
 // Import for navigation
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 
 // Import for Modifier and other UI components
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 //import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 //import androidx.compose.ui.text.input.KeyboardOptions
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.text.input.TextFieldValue
 //import androidx.compose.ui.text.input.TextField
 
 // Import for navigation arguments
 //import androidx.navigation.compose.navArgument
-import androidx.navigation.compose.rememberNavController
 
 // Import for preview
 //import androidx.compose.ui.tooling.preview.Preview
@@ -139,11 +116,8 @@ fun AppNavigator() {
 
         } }) }
         composable("home") { HomeScreen(navController = navController) }
-        composable("booking/{carId}") { backStackEntry ->
-            val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
-            val car = cars.find { it.id == carId }
-            if (car != null) BookingScreen(car = car, onBook = { /* Handle booking */ })
-        }
+
+
         composable("confirmation/{carId}") { backStackEntry ->
             val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
             val car = cars.find { it.id == carId }
@@ -152,10 +126,11 @@ fun AppNavigator() {
         composable("booking/{carId}") { backStackEntry ->
             val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
             val car = cars.find { it.id == carId }
-            if (car != null) BookingScreen(car = car, onBook = { selectedCar ->
-                navController.navigate("confirmation/${selectedCar.id}")
-            })
+            if (car != null) BookingScreen(car = car) { selectedCar, selectedDate, selectedTime ->
+                navController.navigate("confirmation/${selectedCar.id}?date=$selectedDate&time=$selectedTime")
+            }
         }
+
     }
 }
 
