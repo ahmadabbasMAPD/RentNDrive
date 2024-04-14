@@ -15,6 +15,8 @@ class userDatastore(private val context: Context) {
 
         val userPassword_KEY = stringPreferencesKey("PASSWORD")
         val userUserName_KEY = stringPreferencesKey("USERNAME")
+        val carName_KEY = stringPreferencesKey("CARNAME")
+        val carStartDate_KEY = stringPreferencesKey("STARTDATE")
     }
 
     val getUserPassword: Flow<String?> = context.dataStore.data
@@ -34,10 +36,19 @@ class userDatastore(private val context: Context) {
         }
     }
 
-    suspend fun clearUserInformation(){
+    suspend fun saveCarInformation(carName: String, startDate: String){
+        context.dataStore.edit { preferences ->
+            preferences[carName_KEY] = carName
+            preferences[carStartDate_KEY] = startDate
+        }
+    }
+
+    suspend fun clearAllInformation(){
         context.dataStore.edit { preferences ->
             preferences[userPassword_KEY] = ""
             preferences[userUserName_KEY] = ""
+            preferences[carName_KEY] = ""
+            preferences[carStartDate_KEY] = ""
         }
     }
 }

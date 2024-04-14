@@ -131,6 +131,9 @@ fun AppNavigator() {
                 navController.navigate("confirmation/${selectedCar.id}?date=$selectedDate&time=$selectedTime")
             }
         }
+        composable("loading"){
+            LoadingScreen(navCon = navController, destination = "")
+        }
 
     }
 }
