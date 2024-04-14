@@ -1,5 +1,4 @@
 package com.group5.rent_n_drive
-
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -17,38 +16,31 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
-//import androidx.compose.material.Button
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.group5.rent_n_drive.datastore.userDatastore
 import kotlinx.coroutines.launch
-
-//REFERENCES
-// https://developer.android.com/develop/ui/compose/graphics/draw/overview
-// https://stackoverflow.com/questions/67875360/stack-images-one-over-the-other-z-axis-in-android
-// https://developer.android.com/develop/ui/compose/layouts
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -84,14 +76,6 @@ fun HomeScreen(navController: NavController) {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                //Spacer(modifier = Modifier.height(8.dp))
-//                Button(
-//                    modifier = Modifier.padding(20.dp),
-//                    onClick = {},
-//                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
-//                )
-
-
                 Column(
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
@@ -108,7 +92,7 @@ fun HomeScreen(navController: NavController) {
                             items(carsByCategory[index]) { car ->
                                 CarCard(car = car, onCarClick = { selectedCar ->
                                     appScope.launch {
-                                        userDatastoreRef.saveCarInformation(selectedCar.id, "")
+                                        userDatastoreRef.saveCarInformation(selectedCar.id)
                                     }
                                     navController.navigate("booking")
                                 })
@@ -156,15 +140,30 @@ fun CarCard(car: Car, onCarClick: (Car) -> Unit) {
                 .rotate(infiniteRotation)
             ) {
                 drawCircle(
-                    color = Color.White,
+                    color = Color.Black,
                     center = center,
                     radius = size.minDimension / 2,
                     style = Stroke(width = 4.dp.toPx())
                 )
+
+                drawCircle(
+                    color = Color.Black,
+                    center = center,
+                    radius = size.minDimension / 5,
+                )
+                val offsetValue = 7f
                 drawLine(
-                    start = Offset(x = size.width, y = 0f),
-                    end = Offset(x = 0f, y = size.height),
-                    color = Color.White
+                    start = Offset(x = size.width - offsetValue, y = offsetValue),
+                    end = Offset(x = offsetValue, y = size.height - offsetValue),
+                    color = Color.Black,
+                    strokeWidth = 10f
+                )
+
+                drawLine(
+                    start = Offset(x = size.width / 2f, y = size.height / 2f),
+                    end = Offset(x = size.width - offsetValue, y = size.height - offsetValue),
+                    color = Color.Black,
+                    strokeWidth = 10f
                 )
             }
             Image(
@@ -174,7 +173,7 @@ fun CarCard(car: Car, onCarClick: (Car) -> Unit) {
                 contentScale = ContentScale.Fit
             )
         }
-        Spacer(modifier = Modifier.height(2.dp))
+        //Spacer(modifier = Modifier.height(2.dp))
         Text(text = car.name, color = Color.Black)
     }
 }

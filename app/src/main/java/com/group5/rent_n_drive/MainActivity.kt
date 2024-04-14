@@ -122,31 +122,17 @@ fun AppNavigator() {
         } }) }
         composable("home") { HomeScreen(navController = navController) }
 
-
         composable("confirmation") {
-//            backStackEntry ->
-//            val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
-//            val car = cars.find { it.id == carId }
-            //if (car != null)
             val userDatastoreRef = userDatastore(LocalContext.current)//(context)
             val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
             val car = cars.find { it.id == carId.value }
             if (car != null) ConfirmationScreen(car = car, navCon = navController)
         }
         composable("booking") {
-            //backStackEntry ->
-            //val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
-            //val car = cars.find { it.id == carId }
-            //if (car != null) BookingScreen(car = car) { selectedCar, selectedDate, selectedTime ->
-                //navController.navigate("confirmation/${selectedCar.id}?date=$selectedDate&time=$selectedTime")
-            //}
             val userDatastoreRef = userDatastore(LocalContext.current)//(context)
             val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
             val car = cars.find { it.id == carId.value }
-            if (car != null) BookingScreen(navCon = navController,car = car){ selectedCar, selectedDate, selectedTime ->
-                //navController.navigate("confirmation/${selectedCar.id}?date=$selectedDate&time=$selectedTime")
-                navController.navigate("payment")
-            }
+            if (car != null) BookingScreen(navCon = navController,car = car)
         }
         composable("payment"){
             PaymentPage(navCon = navController)

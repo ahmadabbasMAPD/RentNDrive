@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -28,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.group5.rent_n_drive.datastore.userDatastore
+import kotlinx.coroutines.launch
 
 //REFERENCES AND SOURCES:
 // Class Example Notification Code
@@ -36,14 +40,14 @@ import androidx.navigation.NavController
 // https://developer.android.com/develop/ui/compose/graphics/draw/overview
 
 class Notifier: ViewModel(){
-    fun sendNotification(context: Context, carName: String) {
+    fun sendNotification(context: Context, carName: String, endDate: String, startDate: String, userName: String) {
         //val CHANNEL_ID = "BOOKINGCONFRIMATIONRND"
         createNotificationChannel(context, "BOOKINGCONFRIMATIONRND")
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notice = NotificationCompat.Builder(context, "BOOKINGCONFRIMATIONRND")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Booking Confirmed!")
-            .setContentText("$carName Has been Booked")
+            .setContentText("Hello $userName, Your $carName Has been Booked From $startDate to $endDate")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true).build()
 
@@ -67,9 +71,13 @@ class Notifier: ViewModel(){
 @Composable
 fun ConfirmationScreen(car: Car, navCon: NavController) {
     val context = LocalContext.current
-
+    val appScope = rememberCoroutineScope()
+    val userDatastoreRef = userDatastore(LocalContext.current)
+    val startDate = userDatastoreRef.getCarStartDate.collectAsState(initial = "")
+    val endDate = userDatastoreRef.getCarEndDate.collectAsState(initial = "")
+    val userName = userDatastoreRef.getUserName.collectAsState(initial = "")
     val notificationObject = Notifier()
-    notificationObject.sendNotification(context, car.name)
+    notificationObject.sendNotification(context, car.name, endDate.value!!, startDate.value!!, userName.value!!)
 
     Column(
         modifier = Modifier.padding(16.dp).fillMaxSize(),
@@ -103,8 +111,12 @@ fun ConfirmationScreen(car: Car, navCon: NavController) {
         Text(text = "Booking Confirmed!", fontWeight = FontWeight.Bold, fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "You have successfully booked ${car.name}.")
+        Text(text = "From ${startDate.value} to ${endDate.value}")
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
+            appScope.launch{
+                userDatastoreRef.clearCarBookingInformation()
+            }
             navCon.navigate("home")
         }) {
             Text("Return To Home")

@@ -18,6 +18,7 @@ class userDatastore(private val context: Context) {
         val userUserName_KEY = stringPreferencesKey("USERNAME")
         val carId_Key = intPreferencesKey("CARNAME")
         val carStartDate_KEY = stringPreferencesKey("STARTDATE")
+        val carEndDate_KEY = stringPreferencesKey("ENDDATE")
     }
 
     val getUserPassword: Flow<String?> = context.dataStore.data
@@ -40,6 +41,11 @@ class userDatastore(private val context: Context) {
             preferences[carStartDate_KEY] ?: ""
         }
 
+    val getCarEndDate: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[carEndDate_KEY] ?: ""
+        }
+
     suspend fun saveUserInformation(userPassword: String, userName: String){
         context.dataStore.edit { preferences ->
             preferences[userPassword_KEY] = userPassword
@@ -47,19 +53,22 @@ class userDatastore(private val context: Context) {
         }
     }
 
-    suspend fun saveCarInformation(carId: Int, startDate: String){
+    suspend fun saveCarInformation(carId: Int){
         context.dataStore.edit { preferences ->
             preferences[carId_Key] = carId
-            preferences[carStartDate_KEY] = startDate
         }
     }
-
-    suspend fun clearAllInformation(){
+    suspend fun saveBookingInformation(startDate: String, endDate: String){
         context.dataStore.edit { preferences ->
-            preferences[userPassword_KEY] = ""
-            preferences[userUserName_KEY] = ""
+            preferences[carStartDate_KEY] = startDate
+            preferences[carEndDate_KEY] = endDate
+        }
+    }
+    suspend fun clearCarBookingInformation(){
+        context.dataStore.edit { preferences ->
             preferences[carId_Key] = 0
             preferences[carStartDate_KEY] = ""
+            preferences[carEndDate_KEY] = ""
         }
     }
 }

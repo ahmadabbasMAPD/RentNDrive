@@ -1,6 +1,6 @@
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+//import android.app.TimePickerDialog
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
@@ -22,21 +22,25 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.group5.rent_n_drive.Car
 import com.group5.rent_n_drive.MyImage
+import com.group5.rent_n_drive.cars
+import com.group5.rent_n_drive.datastore.userDatastore
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun BookingScreen(navCon: NavController, car: Car, onBook: (Car, String, String) -> Unit) {
-    var showDialog by remember { mutableStateOf(false) }
-    var selectedDate by remember { mutableStateOf("") }
-    var selectedTime by remember { mutableStateOf("") }
-
+fun BookingScreen(navCon: NavController, car: Car) {
+    var selectedStartDate by remember { mutableStateOf("") }
+    var selectedEndDate by remember { mutableStateOf("") }
+    val appScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val userDatastoreRef = userDatastore(context)
+    val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
     val navController = rememberNavController()
 
     // Determine if the "Book Now" button should be enabled
-    val isBookingEnabled = selectedDate.isNotEmpty() && selectedTime.isNotEmpty()
+    val isBookingEnabled = selectedStartDate.isNotEmpty() && selectedEndDate.isNotEmpty()
 
     Scaffold(
         topBar = {
@@ -66,20 +70,49 @@ fun BookingScreen(navCon: NavController, car: Car, onBook: (Car, String, String)
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(text = "Select Date and Time", color = Color.Gray, fontSize = 16.sp)
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { showDatePicker(context) { date -> selectedDate = date } }) {
+                Button(onClick = { showDatePicker(context) { startDate -> selectedStartDate = startDate } }) {
                     Text("Select Date")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { showTimePicker(context) { time -> selectedTime = time } }) {
+                Button(onClick = { showDatePicker(context) { endDate -> selectedEndDate = endDate } }) {
                     Text("Select Time")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 // Display selected date and time
-                Text(text = "Selected Date: $selectedDate", fontSize = 16.sp)
-                Text(text = "Selected Time: $selectedTime", fontSize = 16.sp)
+                Text(text = "Selected Start Date: $selectedStartDate", fontSize = 16.sp)
+                Text(text = "Selected End Date: $selectedEndDate", fontSize = 16.sp)
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { onBook(car, selectedDate, selectedTime) }, enabled = isBookingEnabled) {
-                    Text("Book Now", color = Color.White, fontSize = 18.sp)
+                AnimatedVisibility(
+                    visible = isBookingEnabled,
+                    modifier = Modifier
+                        .height(60.dp)
+                        .width(150.dp),
+
+                    enter = slideInHorizontally(
+                        initialOffsetX = { -1000 },
+                        animationSpec = tween(
+                            durationMillis = 1500,
+                            easing = LinearEasing
+                        )
+                    )
+                ) {
+                    Button(
+                        onClick = {
+                            appScope.launch {
+                                userDatastoreRef.saveBookingInformation(selectedStartDate,selectedEndDate)
+                            }
+                            val car = cars.find { it.id == carId.value }
+                            if (car != null){
+//                                onBook(car, selectedStartDate, selectedEndDate)
+                                navCon.navigate("payment")
+                            }else{
+
+                            }
+                                  },
+                        enabled = isBookingEnabled)
+                    {
+                        Text("Book Now", color = Color.White, fontSize = 18.sp)
+                    }
                 }
             }
         }
@@ -104,13 +137,13 @@ private fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
     }.show()
 }
 
-private fun showTimePicker(context: Context, onTimeSelected: (String) -> Unit) {
-    val calendar = Calendar.getInstance()
-    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-    val minute = calendar.get(Calendar.MINUTE)
-
-    TimePickerDialog(context, { _, selectedHour, selectedMinute ->
-        val selectedTime = "$selectedHour:$selectedMinute"
-        onTimeSelected(selectedTime)
-    }, hour, minute, true).show()
-}
+//private fun showTimePicker(context: Context, onTimeSelected: (String) -> Unit) {
+//    val calendar = Calendar.getInstance()
+//    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+//    val minute = calendar.get(Calendar.MINUTE)
+//
+//    TimePickerDialog(context, { _, selectedHour, selectedMinute ->
+//        val selectedTime = "$selectedHour:$selectedMinute"
+//        onTimeSelected(selectedTime)
+//    }, hour, minute, true).show()
+//}
