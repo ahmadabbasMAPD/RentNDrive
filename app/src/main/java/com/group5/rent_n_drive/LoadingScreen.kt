@@ -69,7 +69,7 @@ fun LoadingScreen(navCon: NavController, destination: String) {
             )
             drawLine(
                 start = Offset(x = size.width, y = 0f),
-                end = Offset(x = 0f, y = size.height),
+                end = Offset(x = 0f, y = size.height / 2f),
                 color = Color.Blue
             )
         }

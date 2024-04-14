@@ -70,6 +70,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -142,7 +143,7 @@ fun AppNavigator() {
             val userDatastoreRef = userDatastore(LocalContext.current)//(context)
             val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
             val car = cars.find { it.id == carId.value }
-            if (car != null) BookingScreen(car = car){ selectedCar, selectedDate, selectedTime ->
+            if (car != null) BookingScreen(navCon = navController,car = car){ selectedCar, selectedDate, selectedTime ->
                 //navController.navigate("confirmation/${selectedCar.id}?date=$selectedDate&time=$selectedTime")
                 navController.navigate("payment")
             }
