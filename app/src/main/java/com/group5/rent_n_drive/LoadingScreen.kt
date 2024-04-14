@@ -30,22 +30,23 @@ import kotlinx.coroutines.delay
 
 
 //REFERENCES
-//
+//https://developer.android.com/develop/ui/compose/graphics/draw/overview
+
 @Composable
 fun LoadingScreen(navCon: NavController, destination: String) {
     LaunchedEffect(Unit) {
         delay(4000)  // the delay of 3 seconds
         navCon.navigate(destination)
     }
-    val infiniteTransition = rememberInfiniteTransition(label = "infinite_part_1")
+    val infiniteAnimation = rememberInfiniteTransition(label = "infinite_1_part_1")
 
-    val rotation by infiniteTransition.animateFloat(
+    val infiniteRotation by infiniteAnimation.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
             animation = tween(1000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
-        ), label = "infinite_part_2"
+        ), label = "infinite_1_part_2"
     )
 
     Column(modifier = Modifier
@@ -58,10 +59,8 @@ fun LoadingScreen(navCon: NavController, destination: String) {
         Canvas(modifier = Modifier
             .height(200.dp)
             .width(200.dp)
-            .rotate(rotation)
+            .rotate(infiniteRotation)
         ) {
-            val canvasWidth = size.width
-            val canvasHeight = size.height
             drawCircle(
                 color = Color.Blue,
                 center = center,
@@ -69,8 +68,8 @@ fun LoadingScreen(navCon: NavController, destination: String) {
                 style = Stroke(width = 4.dp.toPx())
             )
             drawLine(
-                start = Offset(x = canvasWidth, y = 0f),
-                end = Offset(x = 0f, y = canvasHeight),
+                start = Offset(x = size.width, y = 0f),
+                end = Offset(x = 0f, y = size.height),
                 color = Color.Blue
             )
         }

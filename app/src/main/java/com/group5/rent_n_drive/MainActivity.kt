@@ -152,8 +152,8 @@ fun AppNavigator() {
         }
 
         composable("loading/{destination}"){backStackEntry ->
-            val desti = backStackEntry.arguments?.getString("destination")
-            if(desti != null) LoadingScreen(navCon = navController, destination = desti)
+            val destination = backStackEntry.arguments?.getString("destination")
+            if(destination != null) LoadingScreen(navCon = navController, destination = destination)
         }
 
     }

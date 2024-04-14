@@ -38,7 +38,7 @@ fun PaymentPage(navCon: NavController) {
         Spacer(modifier = Modifier.height(30.dp))
         OutlinedTextField(
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp)
+                .padding(start = 20.dp, end = 20.dp)
                 .fillMaxWidth(),
             value = cardHolderName,
             onValueChange = { cardHolderName = it},
@@ -46,12 +46,11 @@ fun PaymentPage(navCon: NavController) {
                 text = "CARD HOLDER NAME",
                 color = Color.Blue)
             },
-            //visualTransfromation =
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp)
+                .padding(start = 20.dp, end = 20.dp)
                 .fillMaxWidth(),
             value = cardNumber,
             onValueChange = { cardNumber = it},
@@ -61,12 +60,11 @@ fun PaymentPage(navCon: NavController) {
                     color = Color.Blue
                 )
             },
-            //visualTransfromation =
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp)
+                .padding(start = 20.dp, end = 20.dp)
                 .fillMaxWidth(),
             value = SCR,
             onValueChange = { SCR = it},
@@ -76,7 +74,6 @@ fun PaymentPage(navCon: NavController) {
                     color = Color.Blue
                 )
             },
-            //visualTransfromation =
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {

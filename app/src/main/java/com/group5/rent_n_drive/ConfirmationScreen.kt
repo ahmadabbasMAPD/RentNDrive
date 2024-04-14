@@ -2,9 +2,7 @@ package com.group5.rent_n_drive
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -19,8 +17,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,40 +33,32 @@ import androidx.navigation.NavController
 // Class Example Notification Code
 // Video: https://www.youtube.com/watch?v=LP623htmWcI
 // Android Studio Developer: https://developer.android.com/develop/ui/views/notifications/build-notification#kts
-
+// https://developer.android.com/develop/ui/compose/graphics/draw/overview
 
 class Notifier: ViewModel(){
     fun sendNotification(context: Context, carName: String) {
         //val CHANNEL_ID = "BOOKINGCONFRIMATIONRND"
         createNotificationChannel(context, "BOOKINGCONFRIMATIONRND")
-        val intent = Intent()
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notice = NotificationCompat.Builder(context, "BOOKINGCONFRIMATIONRND")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Booking Confirmed!")
             .setContentText("$carName Has been Booked")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            // Set the intent that fires when the user taps the notification.
-            .setContentIntent(pendingIntent)
             .setAutoCancel(true).build()
 
         notificationManager.notify(1,notice)
 
     }
-    private fun createNotificationChannel(context: Context, CHANNEL_ID: String) {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is not in the Support Library.
+    private fun createNotificationChannel(context: Context, notifyChannelId: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Booking"
-            val descriptionText = "Hello"
+            val name = "RND Booking"
+            val descriptionText = "Booking Confirmed"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            val channel = NotificationChannel(notifyChannelId, name, importance).apply {
                 description = descriptionText
             }
-            // Register the channel with the system.
-            val notificationManager: NotificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -76,15 +68,15 @@ class Notifier: ViewModel(){
 fun ConfirmationScreen(car: Car, navCon: NavController) {
     val context = LocalContext.current
 
-    val c = Notifier()
-    c.sendNotification(context, car.name)
+    val notificationObject = Notifier()
+    notificationObject.sendNotification(context, car.name)
 
     Column(
         modifier = Modifier.padding(16.dp).fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         Canvas(modifier = Modifier.height(200.dp).width(200.dp)) {
             drawCircle(
                 color = Color.Green,
@@ -92,6 +84,20 @@ fun ConfirmationScreen(car: Car, navCon: NavController) {
                 radius = size.minDimension / 2,
                 style = Stroke(width = 4.dp.toPx())
             )
+            rotate(degrees = 45f) {
+                drawRect(
+                    color = Color.Green,
+                    topLeft = Offset(x = size.width / 3F, y = size.height / 3F),
+                    size = size / 3F
+                )
+            }
+            rotate(degrees = -45f) {
+                drawRect(
+                    color = Color.Green,
+                    topLeft = Offset(x = size.width / 3F, y = size.height / 3F),
+                    size = size / 3F
+                )
+            }
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Booking Confirmed!", fontWeight = FontWeight.Bold, fontSize = 24.sp)
