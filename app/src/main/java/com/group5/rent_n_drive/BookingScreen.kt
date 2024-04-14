@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+//import androidx.navigation.compose.rememberNavController
 import com.group5.rent_n_drive.Car
 import com.group5.rent_n_drive.MyImage
-import com.group5.rent_n_drive.cars
+//import com.group5.rent_n_drive.cars
 import com.group5.rent_n_drive.datastore.userDatastore
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -98,16 +98,13 @@ fun BookingScreen(navCon: NavController, car: Car) {
                     Button(
                         onClick = {
                             appScope.launch {
-                                userDatastoreRef.saveBookingInformation(selectedStartDate,selectedEndDate)
+                                userDatastoreRef.saveBookingInformation(
+                                    selectedStartDate,
+                                    selectedEndDate
+                                )
                             }
-                            //val car = cars.find { it.id == carId.value }
-                            if (car != null){
-//                                onBook(car, selectedStartDate, selectedEndDate)
-                                navCon.navigate("payment")
-                            }else{
-
-                            }
-                                  },
+                            navCon.navigate("payment")
+                        },
                         enabled = isBookingEnabled)
                     {
                         Text("Book Now", color = Color.White, fontSize = 18.sp)
