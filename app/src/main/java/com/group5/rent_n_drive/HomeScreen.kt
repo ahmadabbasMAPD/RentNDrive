@@ -76,6 +76,19 @@ fun HomeScreen(navController: NavController) {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+
+                currentBooking.value?.let { booking ->
+                    Text(
+                        text = "Current Booking: ${booking.carName} from ${booking.startDate} to ${booking.endDate}",
+                        modifier = Modifier.padding(top = 16.dp),
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+
                 Column(
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
