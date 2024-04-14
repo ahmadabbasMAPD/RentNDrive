@@ -36,7 +36,7 @@ fun BookingScreen(navCon: NavController, car: Car) {
     val appScope = rememberCoroutineScope()
     val context = LocalContext.current
     val userDatastoreRef = userDatastore(context)
-    val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
+    //val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
 
     // Determine if the "Book Now" button should be enabled
     val isBookingEnabled = selectedStartDate.isNotEmpty() && selectedEndDate.isNotEmpty()
