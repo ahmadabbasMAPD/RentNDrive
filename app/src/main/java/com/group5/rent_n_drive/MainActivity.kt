@@ -74,7 +74,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.group5.rent_n_drive.datastore.userDatastore
+import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import com.group5.rent_n_drive.ui.theme.RentNDriveTheme
 
 // Import for LoginScreen, HomeScreen, BookingScreen, and ConfirmationScreen
@@ -123,13 +123,13 @@ fun AppNavigator() {
         composable("home") { HomeScreen(navController = navController) }
 
         composable("confirmation") {
-            val userDatastoreRef = userDatastore(LocalContext.current)//(context)
+            val userDatastoreRef = UserBookingDatastore(LocalContext.current)//(context)
             val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
             val car = cars.find { it.id == carId.value }
             if (car != null) ConfirmationScreen(car = car, navCon = navController)
         }
         composable("booking") {
-            val userDatastoreRef = userDatastore(LocalContext.current)//(context)
+            val userDatastoreRef = UserBookingDatastore(LocalContext.current)//(context)
             val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
             val car = cars.find { it.id == carId.value }
             if (car != null) BookingScreen(navCon = navController,car = car)

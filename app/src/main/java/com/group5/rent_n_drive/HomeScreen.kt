@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
@@ -39,11 +40,11 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.group5.rent_n_drive.datastore.userDatastore
+import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import kotlinx.coroutines.launch
 
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun HomeScreen(navController: NavController) {
     val appScope = rememberCoroutineScope()
@@ -51,8 +52,13 @@ fun HomeScreen(navController: NavController) {
     val carsByCategory = categories.map { category ->
         cars.filter { it.type == category }
     }
-    val userDatastoreRef = userDatastore(LocalContext.current)
+    val userDatastoreRef = UserBookingDatastore(LocalContext.current)
     val userName = userDatastoreRef.getUserName.collectAsState(initial = "")
+    val startDate = userDatastoreRef.getCarStartDate.collectAsState(initial = "")
+    val endDate = userDatastoreRef.getCarEndDate.collectAsState(initial = "")
+    val carId = userDatastoreRef.getCarId.collectAsState(initial = "")
+    val prevUser = userDatastoreRef.getPreviousUser.collectAsState(initial = "")
+    val isBooked = userDatastoreRef.getIsBookingMade.collectAsState(initial = false)
 
     Scaffold(
         topBar = {
@@ -77,18 +83,30 @@ fun HomeScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-
-                currentBooking.value?.let { booking ->
-                    Text(
-                        text = "Current Booking: ${booking.carName} from ${booking.startDate} to ${booking.endDate}",
-                        modifier = Modifier.padding(top = 16.dp),
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
+                if(isBooked.value!!){
+                    val bookedCar = cars.find { it.id == carId.value }
+                    if(bookedCar != null && prevUser.value!! == userName.value!!) {
+                        Text(
+                            text = "Current Booking: ${bookedCar.name} from ${startDate.value} to ${endDate.value}",
+                            modifier = Modifier.padding(top = 16.dp),
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(onClick = {
+                            appScope.launch { userDatastoreRef.clearCarBookingInformation() }
+                            navController.navigate("login")
+                        }) {
+                            Text(text = "Cancel Booking")
+                        }
+                    }else{
+                        appScope.launch { userDatastoreRef.clearCarBookingInformation() }
+                        Text(text  = "No Booking Made")
+                    }
+                }else{
+                    Text(text  = "No Booking Made")
                 }
-
-
+                Spacer(modifier = Modifier.height(16.dp))
                 Column(
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
@@ -149,7 +167,8 @@ fun CarCard(car: Car, onCarClick: (Car) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(contentAlignment = Alignment.Center) {
-            Canvas(modifier = Modifier.size(60.dp) // Increased size to make the canvas bigger
+            Canvas(modifier = Modifier
+                .size(60.dp) // Increased size to make the canvas bigger
                 .rotate(infiniteRotation)
             ) {
                 drawCircle(
@@ -164,7 +183,7 @@ fun CarCard(car: Car, onCarClick: (Car) -> Unit) {
                     center = center,
                     radius = size.minDimension / 5,
                 )
-                val offsetValue = 7f
+                val offsetValue = 15f
                 drawLine(
                     start = Offset(x = size.width - offsetValue, y = offsetValue),
                     end = Offset(x = offsetValue, y = size.height - offsetValue),

@@ -1,6 +1,5 @@
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 //import android.app.TimePickerDialog
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
@@ -24,7 +23,7 @@ import androidx.navigation.NavController
 import com.group5.rent_n_drive.Car
 import com.group5.rent_n_drive.MyImage
 //import com.group5.rent_n_drive.cars
-import com.group5.rent_n_drive.datastore.userDatastore
+import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -36,7 +35,7 @@ fun BookingScreen(navCon: NavController, car: Car) {
     var selectedEndDate by remember { mutableStateOf("") }
     val appScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val userDatastoreRef = userDatastore(context)
+    val userDatastoreRef = UserBookingDatastore(context)
     //val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
 
     // Determine if the "Book Now" button should be enabled

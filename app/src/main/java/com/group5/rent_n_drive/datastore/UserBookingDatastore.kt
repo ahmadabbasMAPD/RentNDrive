@@ -3,6 +3,7 @@ package com.group5.rent_n_drive.datastore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -10,20 +11,21 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class userDatastore(private val context: Context) {
+class UserBookingDatastore(private val context: Context) {
     companion object{
         private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("UserInformation")
 
-        val userPassword_KEY = stringPreferencesKey("PASSWORD")
+        val previousUserName_Key = stringPreferencesKey("PREVUSER")
         val userUserName_KEY = stringPreferencesKey("USERNAME")
         val carId_Key = intPreferencesKey("CARNAME")
         val carStartDate_KEY = stringPreferencesKey("STARTDATE")
         val carEndDate_KEY = stringPreferencesKey("ENDDATE")
+        val isBookingMade_KEY = booleanPreferencesKey("ISBOOKINGMADE")
     }
 
-    val getUserPassword: Flow<String?> = context.dataStore.data
+    val getPreviousUser: Flow<String?> = context.dataStore.data
         .map { preferences ->
-            preferences[userPassword_KEY] ?: ""
+            preferences[previousUserName_Key] ?: ""
         }
 
     val getUserName: Flow<String?> = context.dataStore.data
@@ -46,10 +48,24 @@ class userDatastore(private val context: Context) {
             preferences[carEndDate_KEY] ?: ""
         }
 
+    val getIsBookingMade: Flow<Boolean?> = context.dataStore.data
+        .map { preferences ->
+            preferences[isBookingMade_KEY] ?: false
+        }
+
     suspend fun saveUserInformation(userPassword: String, userName: String){
         context.dataStore.edit { preferences ->
-            preferences[userPassword_KEY] = userPassword
+//          preferences[previousUserName_Key] = userPassword
+            if (preferences[previousUserName_Key] == ""){
+                preferences[previousUserName_Key] = userName
+            }
             preferences[userUserName_KEY] = userName
+        }
+    }
+
+    suspend fun savePreviousUserInformation(userName: String){
+        context.dataStore.edit { preferences ->
+            preferences[previousUserName_Key] = userName
         }
     }
 
@@ -62,6 +78,7 @@ class userDatastore(private val context: Context) {
         context.dataStore.edit { preferences ->
             preferences[carStartDate_KEY] = startDate
             preferences[carEndDate_KEY] = endDate
+            preferences[isBookingMade_KEY] = true
         }
     }
     suspend fun clearCarBookingInformation(){
@@ -69,6 +86,7 @@ class userDatastore(private val context: Context) {
             preferences[carId_Key] = 0
             preferences[carStartDate_KEY] = ""
             preferences[carEndDate_KEY] = ""
+            preferences[isBookingMade_KEY] = false
         }
     }
 }

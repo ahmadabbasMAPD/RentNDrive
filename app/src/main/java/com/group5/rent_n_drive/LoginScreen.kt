@@ -27,7 +27,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.group5.rent_n_drive.datastore.userDatastore
+import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import kotlinx.coroutines.launch
 
 @Composable
@@ -36,7 +36,7 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    val userDatastoreRef = userDatastore(LocalContext.current)//(context)
+    val userDatastoreRef = UserBookingDatastore(LocalContext.current)//(context)
 
     Column(modifier = Modifier
         .padding(16.dp),

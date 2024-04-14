@@ -30,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.group5.rent_n_drive.datastore.userDatastore
+import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import kotlinx.coroutines.launch
 
 //REFERENCES AND SOURCES:
@@ -72,7 +72,7 @@ class Notifier: ViewModel(){
 fun ConfirmationScreen(car: Car, navCon: NavController) {
     val context = LocalContext.current
     val appScope = rememberCoroutineScope()
-    val userDatastoreRef = userDatastore(LocalContext.current)
+    val userDatastoreRef = UserBookingDatastore(LocalContext.current)
     val startDate = userDatastoreRef.getCarStartDate.collectAsState(initial = "")
     val endDate = userDatastoreRef.getCarEndDate.collectAsState(initial = "")
     val userName = userDatastoreRef.getUserName.collectAsState(initial = "")
@@ -114,9 +114,6 @@ fun ConfirmationScreen(car: Car, navCon: NavController) {
         Text(text = "From ${startDate.value} to ${endDate.value}")
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            appScope.launch{
-                userDatastoreRef.clearCarBookingInformation()
-            }
             navCon.navigate("home")
         }) {
             Text("Return To Home")
