@@ -13,7 +13,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,9 +37,6 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
     var password by remember { mutableStateOf("") }
 
     val userDatastoreRef = userDatastore(LocalContext.current)//(context)
-
-    val datastoreUserPassword = userDatastoreRef.getUserPassword.collectAsState(initial = "")
-    val datastoreUserName = userDatastoreRef.getUserName.collectAsState(initial = "")
 
     Column(modifier = Modifier
         .padding(16.dp),

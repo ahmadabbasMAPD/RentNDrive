@@ -13,33 +13,48 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+//import androidx.compose.material.Button
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.group5.rent_n_drive.datastore.userDatastore
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(navController: NavController) {
+    val appScope = rememberCoroutineScope()
     val categories = listOf("Compact", "Sport", "Sedan", "SUV")
     val carsByCategory = categories.map { category ->
         cars.filter { it.type == category }
     }
-
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        categories.forEachIndexed { index, category ->
-            CategoryHeader(category)
-            LazyRow(
-                modifier = Modifier.padding(top = 8.dp, bottom = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 8.dp)
-            ) {
-                items(carsByCategory[index]) { car ->
-                    CarCard(car = car, onCarClick = { selectedCar ->
-                        // Navigate to the booking screen with the selected car
-                        navController.navigate("booking/${selectedCar.id}")
-                    })
+    val userDatastoreRef = userDatastore(LocalContext.current)
+    val userName = userDatastoreRef.getUserName.collectAsState(initial = "")
+    Column(modifier = Modifier.fillMaxSize()) {
+        Text(text = "Welcome ${userName.value} !")
+        Spacer(modifier = Modifier.height(20.dp))
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            categories.forEachIndexed { index, category ->
+                CategoryHeader(category)
+                LazyRow(
+                    modifier = Modifier.padding(top = 8.dp, bottom = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp)
+                ) {
+                    items(carsByCategory[index]) { car ->
+                        CarCard(car = car, onCarClick = { selectedCar ->
+                            // Navigate to the booking screen with the selected car
+                            appScope.launch{
+                                userDatastoreRef.saveCarInformation(selectedCar.id,"")
+                            }
+                            navController.navigate("booking")
+                        })
+                    }
                 }
             }
         }
@@ -57,6 +72,7 @@ fun CategoryHeader(category: String) {
     )
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun CarCard(car: Car, onCarClick: (Car) -> Unit) {
     Column(

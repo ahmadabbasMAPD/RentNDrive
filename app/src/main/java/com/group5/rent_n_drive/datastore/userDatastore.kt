@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +16,7 @@ class userDatastore(private val context: Context) {
 
         val userPassword_KEY = stringPreferencesKey("PASSWORD")
         val userUserName_KEY = stringPreferencesKey("USERNAME")
-        val carName_KEY = stringPreferencesKey("CARNAME")
+        val carId_Key = intPreferencesKey("CARNAME")
         val carStartDate_KEY = stringPreferencesKey("STARTDATE")
     }
 
@@ -29,6 +30,16 @@ class userDatastore(private val context: Context) {
             preferences[userUserName_KEY] ?: ""
         }
 
+    val getCarId: Flow<Int?> = context.dataStore.data
+        .map { preferences ->
+            preferences[carId_Key] ?: 0
+        }
+
+    val getCarStartDate: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[carStartDate_KEY] ?: ""
+        }
+
     suspend fun saveUserInformation(userPassword: String, userName: String){
         context.dataStore.edit { preferences ->
             preferences[userPassword_KEY] = userPassword
@@ -36,9 +47,9 @@ class userDatastore(private val context: Context) {
         }
     }
 
-    suspend fun saveCarInformation(carName: String, startDate: String){
+    suspend fun saveCarInformation(carId: Int, startDate: String){
         context.dataStore.edit { preferences ->
-            preferences[carName_KEY] = carName
+            preferences[carId_Key] = carId
             preferences[carStartDate_KEY] = startDate
         }
     }
@@ -47,7 +58,7 @@ class userDatastore(private val context: Context) {
         context.dataStore.edit { preferences ->
             preferences[userPassword_KEY] = ""
             preferences[userUserName_KEY] = ""
-            preferences[carName_KEY] = ""
+            preferences[carId_Key] = 0
             preferences[carStartDate_KEY] = ""
         }
     }

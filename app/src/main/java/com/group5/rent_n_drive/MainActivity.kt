@@ -67,10 +67,13 @@ import androidx.activity.compose.setContent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.group5.rent_n_drive.datastore.userDatastore
 import com.group5.rent_n_drive.ui.theme.RentNDriveTheme
 
 // Import for LoginScreen, HomeScreen, BookingScreen, and ConfirmationScreen
@@ -119,20 +122,38 @@ fun AppNavigator() {
         composable("home") { HomeScreen(navController = navController) }
 
 
-        composable("confirmation/{carId}") { backStackEntry ->
-            val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
-            val car = cars.find { it.id == carId }
+        composable("confirmation") {
+//            backStackEntry ->
+//            val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
+//            val car = cars.find { it.id == carId }
+            //if (car != null)
+            val userDatastoreRef = userDatastore(LocalContext.current)//(context)
+            val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
+            val car = cars.find { it.id == carId.value }
             if (car != null) ConfirmationScreen(car = car, navCon = navController)
         }
-        composable("booking/{carId}") { backStackEntry ->
-            val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
-            val car = cars.find { it.id == carId }
-            if (car != null) BookingScreen(car = car) { selectedCar, selectedDate, selectedTime ->
-                navController.navigate("confirmation/${selectedCar.id}?date=$selectedDate&time=$selectedTime")
+        composable("booking") {
+            //backStackEntry ->
+            //val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
+            //val car = cars.find { it.id == carId }
+            //if (car != null) BookingScreen(car = car) { selectedCar, selectedDate, selectedTime ->
+                //navController.navigate("confirmation/${selectedCar.id}?date=$selectedDate&time=$selectedTime")
+            //}
+            val userDatastoreRef = userDatastore(LocalContext.current)//(context)
+            val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
+            val car = cars.find { it.id == carId.value }
+            if (car != null) BookingScreen(car = car){ selectedCar, selectedDate, selectedTime ->
+                //navController.navigate("confirmation/${selectedCar.id}?date=$selectedDate&time=$selectedTime")
+                navController.navigate("payment")
             }
         }
-        composable("loading"){
-            LoadingScreen(navCon = navController, destination = "")
+        composable("payment"){
+            PaymentPage(navCon = navController)
+        }
+
+        composable("loading/{destination}"){backStackEntry ->
+            val desti = backStackEntry.arguments?.getString("destination")
+            if(desti != null) LoadingScreen(navCon = navController, destination = desti)
         }
 
     }

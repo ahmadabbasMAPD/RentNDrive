@@ -3,14 +3,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
-import coil.compose.rememberImagePainter
 import com.group5.rent_n_drive.Car
-
-
 import com.group5.rent_n_drive.MyImage
 import androidx.compose.foundation.Image
 
@@ -19,6 +15,7 @@ import androidx.compose.foundation.Image
 
 @Composable
 fun BookingScreen(car: Car, onBook: (Car, String, String) -> Unit) {
+//fun BookingScreen(car: Car){
     var showDialog by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
     var selectedTime by remember { mutableStateOf("") }
