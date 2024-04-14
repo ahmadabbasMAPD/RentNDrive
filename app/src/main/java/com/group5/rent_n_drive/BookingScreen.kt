@@ -1,5 +1,6 @@
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 //import android.app.TimePickerDialog
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
@@ -70,11 +71,11 @@ fun BookingScreen(navCon: NavController, car: Car) {
                 Text(text = "Select Date and Time", color = Color.Gray, fontSize = 16.sp)
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = { showDatePicker(context) { startDate -> selectedStartDate = startDate } }) {
-                    Text("Select Date")
+                    Text("Select Start Date")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = { showDatePicker(context) { endDate -> selectedEndDate = endDate } }) {
-                    Text("Select Time")
+                    Text("Select End Date")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 // Display selected date and time
@@ -132,7 +133,7 @@ private fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
         datePicker.minDate = currentDateInMillis
     }.show()
 }
-
+//
 //private fun showTimePicker(context: Context, onTimeSelected: (String) -> Unit) {
 //    val calendar = Calendar.getInstance()
 //    val hour = calendar.get(Calendar.HOUR_OF_DAY)
