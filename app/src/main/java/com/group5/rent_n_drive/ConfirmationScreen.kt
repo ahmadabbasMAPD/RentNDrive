@@ -16,13 +16,11 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,7 +29,6 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.group5.rent_n_drive.datastore.UserBookingDatastore
-import kotlinx.coroutines.launch
 
 //REFERENCES AND SOURCES:
 // Class Example Notification Code
@@ -41,7 +38,6 @@ import kotlinx.coroutines.launch
 
 class Notifier: ViewModel(){
     fun sendNotification(context: Context, carName: String, endDate: String, startDate: String, userName: String) {
-        //val CHANNEL_ID = "BOOKINGCONFRIMATIONRND"
         createNotificationChannel(context, "BOOKINGCONFRIMATIONRND")
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notice = NotificationCompat.Builder(context, "BOOKINGCONFRIMATIONRND")
