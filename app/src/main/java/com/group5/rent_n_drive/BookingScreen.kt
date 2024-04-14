@@ -1,3 +1,7 @@
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -8,9 +12,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import com.group5.rent_n_drive.Car
 import com.group5.rent_n_drive.MyImage
-import androidx.compose.foundation.Image
-
-
 
 
 @Composable
@@ -19,6 +20,7 @@ fun BookingScreen(car: Car, onBook: (Car, String, String) -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
     var selectedTime by remember { mutableStateOf("") }
+    var isAnimationFinished by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text(text = "Booking Details", fontWeight = FontWeight.Bold, fontSize = 24.sp)
@@ -34,8 +36,27 @@ fun BookingScreen(car: Car, onBook: (Car, String, String) -> Unit) {
             Text("Select Date and Time")
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { onBook(car, selectedDate, selectedTime) }) {
-            Text("Book Now")
+
+        AnimatedVisibility(
+            visible = isAnimationFinished,
+            modifier = Modifier
+                .height(45.dp)
+                .width(115.dp),
+
+            enter = slideInHorizontally(
+                initialOffsetX = { -1000 },
+                animationSpec = tween(
+                    durationMillis = 1500,
+                    easing = LinearEasing
+                )
+            )
+        ) {
+            Button(onClick = {
+                onBook(car, selectedDate, selectedTime)
+                isAnimationFinished = true
+            }) {
+                Text("Book Now")
+            }
         }
     }
 
@@ -56,6 +77,7 @@ fun BookingScreen(car: Car, onBook: (Car, String, String) -> Unit) {
                     // For example, you might use a date picker and time picker here
                     // Once selected, update the state variables accordingly
                     showDialog = false
+                    isAnimationFinished = true
                 }) {
                     Text("Confirm")
                 }
