@@ -109,7 +109,8 @@ class MainActivity : ComponentActivity() {
 fun AppNavigator() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = "login") {
-        composable("login") { LoginScreen(onLogin = { username, password ->if (username == "test" && password == "password") {
+        composable("login") {
+            LoginScreen(onLogin = { username, password ->if (username.trim() != "" && password.trim() != "") {
             navController.navigate("home")
         } else {
             // Show error message
@@ -121,7 +122,7 @@ fun AppNavigator() {
         composable("confirmation/{carId}") { backStackEntry ->
             val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
             val car = cars.find { it.id == carId }
-            if (car != null) ConfirmationScreen(car = car)
+            if (car != null) ConfirmationScreen(car = car, navCon = navController)
         }
         composable("booking/{carId}") { backStackEntry ->
             val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()

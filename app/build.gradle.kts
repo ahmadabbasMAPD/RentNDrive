@@ -66,6 +66,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation ("androidx.compose.ui:ui:1.0.5")
     implementation ("androidx.compose.material:material:1.0.5")
     implementation ("androidx.compose.ui:ui-tooling:1.0.5")
