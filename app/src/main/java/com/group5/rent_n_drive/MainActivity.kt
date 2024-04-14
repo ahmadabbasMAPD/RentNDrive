@@ -143,6 +143,10 @@ fun AppNavigator() {
             if(destination != null) LoadingScreen(navCon = navController, destination = destination)
         }
 
+        composable("captureCar"){
+            CarImageCapture(navCon = navController)
+        }
+
     }
 }
 

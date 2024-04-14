@@ -121,6 +121,11 @@ fun ConfirmationScreen(car: Car, navCon: NavController) {
         }) {
             Text("Return To Home")
         }
+        Button(onClick = {
+            navCon.navigate("captureCar")
+        }) {
+            Text("Capture Image of Car")
+        }
     }
 }
 
