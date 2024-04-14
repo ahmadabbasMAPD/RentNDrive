@@ -132,14 +132,3 @@ private fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
         datePicker.minDate = currentDateInMillis
     }.show()
 }
-//
-//private fun showTimePicker(context: Context, onTimeSelected: (String) -> Unit) {
-//    val calendar = Calendar.getInstance()
-//    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-//    val minute = calendar.get(Calendar.MINUTE)
-//
-//    TimePickerDialog(context, { _, selectedHour, selectedMinute ->
-//        val selectedTime = "$selectedHour:$selectedMinute"
-//        onTimeSelected(selectedTime)
-//    }, hour, minute, true).show()
-//}

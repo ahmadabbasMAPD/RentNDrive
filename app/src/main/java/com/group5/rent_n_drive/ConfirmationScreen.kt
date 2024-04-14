@@ -71,7 +71,7 @@ class Notifier: ViewModel(){
 @Composable
 fun ConfirmationScreen(car: Car, navCon: NavController) {
     val context = LocalContext.current
-    val appScope = rememberCoroutineScope()
+    //val appScope = rememberCoroutineScope()
     val userDatastoreRef = UserBookingDatastore(LocalContext.current)
     val startDate = userDatastoreRef.getCarStartDate.collectAsState(initial = "")
     val endDate = userDatastoreRef.getCarEndDate.collectAsState(initial = "")
@@ -89,23 +89,27 @@ fun ConfirmationScreen(car: Car, navCon: NavController) {
             drawCircle(
                 color = Color.Green,
                 center = center,
-                radius = size.minDimension / 2,
-                style = Stroke(width = 4.dp.toPx())
+                radius = size.minDimension / 2f,
+                style = Stroke(width = 7.dp.toPx())
             )
-            rotate(degrees = 45f) {
-                drawRect(
-                    color = Color.Green,
-                    topLeft = Offset(x = size.width / 3F, y = size.height / 3F),
-                    size = size / 3F
-                )
-            }
-            rotate(degrees = -45f) {
-                drawRect(
-                    color = Color.Green,
-                    topLeft = Offset(x = size.width / 3F, y = size.height / 3F),
-                    size = size / 3F
-                )
-            }
+            drawLine(
+                start = Offset(x = (size.width/2f) + 10f, y = (size.height/2f) + 120f),
+                end = Offset(x = size.width - 110f, y = 120f),
+                color = Color.Green,
+                strokeWidth = 40f
+            )
+            drawLine(
+                start = Offset(x = (size.width/2f) + 10f, y = (size.height/2f) + 120f),
+                end = Offset(x = 90f, y = 300f),
+                color = Color.Green,
+                strokeWidth = 40f
+            )
+
+            drawCircle(
+                color = Color.Green,
+                center = Offset((center.x) + 10f , (center.y) + 120f),
+                radius = 20f,
+            )
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Booking Confirmed!", fontWeight = FontWeight.Bold, fontSize = 24.sp)

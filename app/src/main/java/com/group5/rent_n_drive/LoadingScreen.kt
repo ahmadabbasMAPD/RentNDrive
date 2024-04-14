@@ -64,13 +64,67 @@ fun LoadingScreen(navCon: NavController, destination: String) {
             drawCircle(
                 color = Color.Blue,
                 center = center,
-                radius = size.minDimension / 2,
-                style = Stroke(width = 4.dp.toPx())
+                radius = size.minDimension / 2.1f,
+                style = Stroke(width = 7.dp.toPx())
+            )
+            drawRect(
+                color = Color.White,
+                size = size / 2F
+
+            )
+
+            drawCircle(
+                color = Color.Black,
+                center = center,
+                radius = size.minDimension / 3f,
+            )
+            drawCircle(
+                color = Color.Gray,
+                center = center,
+                radius = size.minDimension / 4.6f,
+            )
+
+            drawCircle(
+                color = Color.LightGray,
+                center = Offset(center.x + 40f, center.y),
+                radius = size.minDimension / 10f,
+            )
+
+            drawCircle(
+                color = Color.LightGray,
+                center = Offset(center.x - 40f, center.y),
+                radius = size.minDimension / 10f,
+            )
+
+            drawCircle(
+                color = Color.LightGray,
+                center = Offset(center.x , center.y+ 40f),
+                radius = size.minDimension / 10f,
+            )
+
+            drawCircle(
+                color = Color.LightGray,
+                center = Offset(center.x , center.y- 40f),
+                radius = size.minDimension / 10f,
+            )
+
+            drawCircle(
+                color = Color.Gray,
+                center = center,
+                radius = size.minDimension / 12f,
+            )
+
+            drawLine(
+                start = Offset(x = 7f, y = size.height /1.92f),
+                end = Offset(x = 7f - 100f, y = (size.height /1.92f) + 100f),
+                color = Color.Blue,
+                strokeWidth = 18f
             )
             drawLine(
-                start = Offset(x = size.width, y = 0f),
-                end = Offset(x = 0f, y = size.height / 2f),
-                color = Color.Blue
+                start = Offset(x = 15f, y = size.height /1.92f),
+                end = Offset(x = 15f + 100f, y = (size.height /1.92f) + 100f),
+                color = Color.Blue,
+                strokeWidth = 18f
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
