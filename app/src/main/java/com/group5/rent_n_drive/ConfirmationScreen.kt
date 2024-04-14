@@ -36,12 +36,12 @@ import androidx.navigation.NavController
 
 class Notifier: ViewModel(){
     fun sendNotification(context: Context, carName: String) {
-        val CHANNEL_ID = "BOOKINGCONFRIMATIONRND"
-        createNotificationChannel(context, CHANNEL_ID)
+        //val CHANNEL_ID = "BOOKINGCONFRIMATIONRND"
+        createNotificationChannel(context, "BOOKINGCONFRIMATIONRND")
         val intent = Intent()
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notice = NotificationCompat.Builder(context, CHANNEL_ID)
+        val notice = NotificationCompat.Builder(context, "BOOKINGCONFRIMATIONRND")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Booking Confirmed!")
             .setContentText("$carName Has been Booked")
@@ -73,7 +73,7 @@ class Notifier: ViewModel(){
 
 @Composable
 fun ConfirmationScreen(car: Car, navCon: NavController) {
-    val context = LocalContext.current;
+    val context = LocalContext.current
 
     val c = Notifier()
     c.sendNotification(context, car.name)
