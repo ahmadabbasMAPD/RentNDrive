@@ -81,7 +81,7 @@ fun PaymentPage(navCon: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(15.dp))
-        Text(text = "Payment of $ ${price.value}.00", fontWeight = FontWeight.Bold, fontSize = 40.sp)
+        Text(text = "Payment of $ ${price.value}.00", fontWeight = FontWeight.Bold, fontSize = 30.sp)
         Spacer(modifier = Modifier.height(30.dp))
         OutlinedTextField(
             modifier = Modifier

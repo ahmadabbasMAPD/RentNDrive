@@ -1,5 +1,8 @@
 package com.group5.rent_n_drive
 
+import android.app.NotificationManager
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,18 +38,23 @@ import kotlinx.coroutines.launch
 
 // REFERENCES
 // https://developer.android.com/develop/ui/compose/graphics/draw/overview
+// https://developer.android.com/reference/android/app/NotificationManager
+
 @Composable
 fun LoginScreen(onLogin: (String, String) -> Unit) {
-    val appScope = rememberCoroutineScope()
+    val appScope = rememberCoroutineScope() //set up app scope
+    val context = LocalContext.current //get local context
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val orange = Color(0xFFe18b1e)
+    val orange = Color(0xFFe18b1e)//set new color for logo
     val userDatastoreRef = UserBookingDatastore(LocalContext.current)//(context)
+    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager//use
+    //to check whether notification permissions are allowed
 
     Column(modifier = Modifier
         .padding(16.dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally//align elements in center
     ) {
         Spacer(modifier = Modifier.height(80.dp))
         Box(modifier = Modifier
@@ -58,7 +66,8 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
                     .width(200.dp)
             ) {
 
-                val offsetValue = 50f
+                //Below are the prices to draw the Rent N Drive Logo
+                val offsetValue = 50f//Used to move lines around
                 drawLine(
                     start = Offset(x = size.width / 2f, y = size.height / 2f),
                     end = Offset(x = size.width - offsetValue, y = size.height - offsetValue),
@@ -95,6 +104,10 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
             }
             Text(text = "R N D" ,fontSize = 30.sp,  color = orange)
         }
+        if(!notificationManager.areNotificationsEnabled()){
+            //send toast to ask for permission if permission not given for app.
+            Toast.makeText(context, "This App requires Notification Permission, please allow Notifications", Toast.LENGTH_LONG).show()
+        }
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Rent and Drive Login")
         Spacer(modifier = Modifier.height(16.dp))
@@ -109,14 +122,14 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
             value = password,
             onValueChange = { password = it },
             label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
+            visualTransformation = PasswordVisualTransformation(),//hide password using ***
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            appScope.launch {  userDatastoreRef.saveUserInformation(username) }
-            onLogin(username, password)
+            appScope.launch {  userDatastoreRef.saveUserInformation(username) }//save the user name
+            onLogin(username, password)//Login
         }) {
             Text("Login")
         }
