@@ -1,6 +1,5 @@
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-//import android.app.TimePickerDialog
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
@@ -19,15 +18,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
-//import androidx.navigation.compose.rememberNavController
 import com.group5.rent_n_drive.Car
 import com.group5.rent_n_drive.MyImage
-//import com.group5.rent_n_drive.cars
 import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
-
+// REFERENCES
+// https://stackoverflow.com/questions/71341887/how-to-compare-if-a-date-is-greater-than-other
+// https://stackoverflow.com/questions/62484394/kotlin-android-platform-how-to-check-if-the-text-contains-any-numbers-symbols
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun BookingScreen(navCon: NavController, car: Car) {

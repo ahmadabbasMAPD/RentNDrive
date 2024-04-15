@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.sp
 import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import kotlinx.coroutines.launch
 
+// REFERENCES
+// https://developer.android.com/develop/ui/compose/graphics/draw/overview
 @Composable
 fun LoginScreen(onLogin: (String, String) -> Unit) {
     val appScope = rememberCoroutineScope()
@@ -55,6 +57,14 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
                     .height(200.dp)
                     .width(200.dp)
             ) {
+
+                val offsetValue = 50f
+                drawLine(
+                    start = Offset(x = size.width / 2f, y = size.height / 2f),
+                    end = Offset(x = size.width - offsetValue, y = size.height - offsetValue),
+                    color = orange,
+                    strokeWidth = 50f
+                )
                 drawCircle(
                     color = Color.Black,
                     center = center,
@@ -68,7 +78,11 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
                     radius = size.minDimension / 5,
                 )
 
-                val offsetValue = 50f
+                drawCircle(
+                    color = Color.LightGray,
+                    center = center,
+                    radius = size.minDimension / 7,
+                )
 
                 drawLine(
                     start = Offset(x = size.width - offsetValue, y = offsetValue),
@@ -77,12 +91,7 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
                     strokeWidth = 30f
                 )
 
-                drawLine(
-                    start = Offset(x = size.width / 2f, y = size.height / 2f),
-                    end = Offset(x = size.width - offsetValue, y = size.height - offsetValue),
-                    color = orange,
-                    strokeWidth = 50f
-                )
+
             }
             Text(text = "R N D" ,fontSize = 30.sp,  color = orange)
         }
