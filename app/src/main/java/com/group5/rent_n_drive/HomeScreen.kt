@@ -37,6 +37,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -52,12 +53,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(navController: NavController) {
     val appScope = rememberCoroutineScope()
-    val categories = listOf("Compact", "Sport", "Sedan", "SUV")
-    val categoryPrices = listOf(1500, 4500, 2500, 3000)
+    val categories = listOf("Compact", "Sport", "Sedan", "SUV")//set list of Categories
+    val categoryPrices = listOf(1500, 4500, 2500, 3000)//set prices for each category
     val carsByCategory = categories.map { category ->
         cars.filter { it.type == category }
     }
-    val userDatastoreRef = UserBookingDatastore(LocalContext.current)
+    val userDatastoreRef = UserBookingDatastore(LocalContext.current)//get Datastore information to display current booking
     val userName = userDatastoreRef.getUserName.collectAsState(initial = "")
     val startDate = userDatastoreRef.getCarStartDate.collectAsState(initial = "")
     val endDate = userDatastoreRef.getCarEndDate.collectAsState(initial = "")
@@ -84,9 +85,10 @@ fun HomeScreen(navController: NavController) {
             ) {
 
                 if(isBooked.value!!){
-                    val bookedCar = cars.find { it.id == carId.value }
-                    if(bookedCar != null && prevUser.value!! == userName.value!!) {
-                        Text(
+                    val bookedCar = cars.find { it.id == carId.value }//check if car exists
+                    if(bookedCar != null && prevUser.value!! == userName.value!!) {//check if current user same as the
+                        // previous user to display prior booking history
+                        Text(//display current booking history
                             text = "Current Booking: ${bookedCar.name} from ${startDate.value} to ${endDate.value} for $ ${price.value}.00",
                             modifier = Modifier.padding(top = 16.dp),
                             fontWeight = FontWeight.Bold,
@@ -97,7 +99,7 @@ fun HomeScreen(navController: NavController) {
                             appScope.launch { userDatastoreRef.clearCarBookingInformation() }
                             navController.navigate("login")
                         }) {
-                            Text(text = "Cancel Booking")
+                            Text(text = "Cancel Booking")//cancels booking and sends back to login screen
                         }
                     }else{
                         appScope.launch { userDatastoreRef.clearCarBookingInformation() }
@@ -112,9 +114,9 @@ fun HomeScreen(navController: NavController) {
                         .verticalScroll(rememberScrollState())
                         .padding(top = 8.dp, bottom = 16.dp)
                 ) {
-                    categories.forEachIndexed { index, category ->
+                    categories.forEachIndexed { index, category ->//Display each car segmented by Category
                         Spacer(modifier = Modifier.height(5.dp))
-                        CategoryHeader("$category - $ ${categoryPrices[index]}.00")
+                        CategoryHeader("$category - $ ${categoryPrices[index]}.00")//Show Price of each Category
                         LazyRow(
                             modifier = Modifier.padding(top = 8.dp, bottom = 16.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -145,11 +147,11 @@ fun CategoryHeader(category: String) {
         textAlign = TextAlign.Start
     )
 }
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(ExperimentalCoilApi::class)//to display each Image Tile
 @Composable
 fun CarCard(car: Car, onCarClick: (Car) -> Unit) {
     val infiniteAnimation = rememberInfiniteTransition(label = "infinite_1_part_1")
-    val infiniteRotation by infiniteAnimation.animateFloat(
+    val infiniteRotation by infiniteAnimation.animateFloat(//Image Loading graphic and animation
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
@@ -167,7 +169,7 @@ fun CarCard(car: Car, onCarClick: (Car) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(contentAlignment = Alignment.Center) {
-            Canvas(modifier = Modifier
+            Canvas(modifier = Modifier //Image Loading graphic and animation
                 .size(60.dp) // Increased size to make the canvas bigger
                 .rotate(infiniteRotation)
             ) {
@@ -205,15 +207,6 @@ fun CarCard(car: Car, onCarClick: (Car) -> Unit) {
                 contentScale = ContentScale.Fit
             )
         }
-        //Spacer(modifier = Modifier.height(2.dp))
-        Text(text = car.name, color = Color.Black)
+        Text(text = car.name, color = Color.Black, fontSize = 20.sp)
     }
 }
-
-
-
-//@Preview
-//@Composable
-//fun HomeScreenPreview() {
-//    HomeScreen()
-//}

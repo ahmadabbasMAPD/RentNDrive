@@ -3,7 +3,7 @@ package com.group5.rent_n_drive
 * Made by Ahmad Abbas, Rahul Edirisinghe, Calist Dsouza, Saurav Gautam for MAPD721 Project.
 * Class notes, and Other references and online resources used to help write code given below.
 * */
-
+//Database for the cars to be used in the app
 data class Car(val id: Int, val name: String, val type: String, val imageUrl: String)
 
 val cars = listOf(

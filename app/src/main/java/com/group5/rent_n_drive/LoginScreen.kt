@@ -35,7 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import kotlinx.coroutines.launch
-
+/*
+* Made by Ahmad Abbas, Rahul Edirisinghe, Calist Dsouza, Saurav Gautam for MAPD721 Project.
+* Class notes, and Other references and online resources used to help write code given below.
+* */
 // REFERENCES
 // https://developer.android.com/develop/ui/compose/graphics/draw/overview
 // https://developer.android.com/reference/android/app/NotificationManager

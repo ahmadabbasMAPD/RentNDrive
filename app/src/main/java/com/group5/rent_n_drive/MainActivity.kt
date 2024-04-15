@@ -77,26 +77,10 @@ import androidx.navigation.compose.rememberNavController
 import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import com.group5.rent_n_drive.ui.theme.RentNDriveTheme
 
-// Import for LoginScreen, HomeScreen, BookingScreen, and ConfirmationScreen
-
-// Import for Car data class
-
-// Import for navigation
-
-// Import for Modifier and other UI components
-//import androidx.compose.runtime.Composable
-//import androidx.compose.ui.text.input.KeyboardOptions
-//import androidx.compose.ui.text.input.TextField
-
-// Import for navigation arguments
-//import androidx.navigation.compose.navArgument
-
-// Import for preview
-//import androidx.compose.ui.tooling.preview.Preview
-
-// Your MainActivity and AppNavigator composable code goes here
-
-
+/*
+* Made by Ahmad Abbas, Rahul Edirisinghe, Calist Dsouza, Saurav Gautam for MAPD721 Project.
+* Class notes, and Other references and online resources used to help write code given below.
+* */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -27,11 +27,16 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
-
+/*
+* Made by Ahmad Abbas, Rahul Edirisinghe, Calist Dsouza, Saurav Gautam for MAPD721 Project.
+* Class notes, and Other references and online resources used to help write code given below.
+* */
 
 //REFERENCES
 //https://developer.android.com/develop/ui/compose/graphics/draw/overview
 
+
+// This is a temporary screen used to give illusion of processing payment
 @Composable
 fun LoadingScreen(navCon: NavController, destination: String) {
     LaunchedEffect(Unit) {

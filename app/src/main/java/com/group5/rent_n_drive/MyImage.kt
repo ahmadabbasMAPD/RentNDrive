@@ -12,7 +12,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import coil.compose.rememberImagePainter
 import com.group5.rent_n_drive.Car
-
+/*
+* Made by Ahmad Abbas, Rahul Edirisinghe, Calist Dsouza, Saurav Gautam for MAPD721 Project.
+* Class notes, and Other references and online resources used to help write code given below.
+* */
 @Composable
 fun MyImage(imageUrl: String) {
     Image(
