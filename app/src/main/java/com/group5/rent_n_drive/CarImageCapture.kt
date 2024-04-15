@@ -32,12 +32,15 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Objects
-
+/*
+* Made by Ahmad Abbas, Rahul Edirisinghe, Calist Dsouza, Saurav Gautam for MAPD721 Project.
+* Class notes, and Other references and online resources used to help write code given below.
+* */
 @Composable
 fun CarImageCapture(navCon: NavController) {
     val context = LocalContext.current
     val file = context.createImageFile()
-    val uri = FileProvider.getUriForFile(
+    val uri = FileProvider.getUriForFile(//set file provider
         Objects.requireNonNull(context),
         context.packageName + ".provider", file
     )
@@ -52,7 +55,7 @@ fun CarImageCapture(navCon: NavController) {
             capturedImageUri = uri
         }
 
-
+//request permission if not granted
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ){
@@ -76,7 +79,7 @@ fun CarImageCapture(navCon: NavController) {
         verticalArrangement = Arrangement.Bottom
     ) {
 
-        Button(onClick = {
+        Button(onClick = {//request permission if not granted
             val permissionCheckResult =
                 ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
 
@@ -118,7 +121,7 @@ fun CarImageCapture(navCon: NavController) {
 
 }
 
-fun Context.createImageFile(): File {
+fun Context.createImageFile(): File {//create Image file and store it
     val timeStamp = SimpleDateFormat("yyyy_MM_dd_HH:mm:ss").format(Date())
     val imageFileName = "JPEG_" + timeStamp + "_"
     val image = File.createTempFile(

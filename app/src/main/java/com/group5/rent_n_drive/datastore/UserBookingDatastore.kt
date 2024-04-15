@@ -10,12 +10,17 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+/*
+* Made by Ahmad Abbas, Rahul Edirisinghe, Calist Dsouza, Saurav Gautam for MAPD721 Project.
+* Class notes, and Other references and online resources used to help write code given below.
+* */
 
-class UserBookingDatastore(private val context: Context) {
+class UserBookingDatastore(private val context: Context) {//Use to move
     companion object{
         private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("UserInformation")
 
-        val previousUserName_Key = stringPreferencesKey("PREVUSER")
+        val previousUserName_Key = stringPreferencesKey("PREVUSER")//used for a bit
+    //of Dynamics - hold booking value for previous user
         val userUserName_KEY = stringPreferencesKey("USERNAME")
         val carId_Key = intPreferencesKey("CARNAME")
         val carPrice_Key = intPreferencesKey("PRICE")
@@ -80,14 +85,14 @@ class UserBookingDatastore(private val context: Context) {
             preferences[carPrice_Key] = carPrice
         }
     }
-    suspend fun saveBookingInformation(startDate: String, endDate: String){
+    suspend fun saveBookingInformation(startDate: String, endDate: String){//save booking data
         context.dataStore.edit { preferences ->
             preferences[carStartDate_KEY] = startDate
             preferences[carEndDate_KEY] = endDate
             preferences[isBookingMade_KEY] = true
         }
     }
-    suspend fun clearCarBookingInformation(){
+    suspend fun clearCarBookingInformation(){//clear booking data
         context.dataStore.edit { preferences ->
             preferences[carId_Key] = 0
             preferences[carStartDate_KEY] = ""

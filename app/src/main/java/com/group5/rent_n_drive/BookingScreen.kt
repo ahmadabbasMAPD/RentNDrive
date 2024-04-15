@@ -24,6 +24,12 @@ import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
+
+/*
+* Made by Ahmad Abbas, Rahul Edirisinghe, Calist Dsouza, Saurav Gautam for MAPD721 Project.
+* Class notes, and Other references and online resources used to help write code given below.
+* */
+
 // REFERENCES
 // https://stackoverflow.com/questions/71341887/how-to-compare-if-a-date-is-greater-than-other
 // https://stackoverflow.com/questions/62484394/kotlin-android-platform-how-to-check-if-the-text-contains-any-numbers-symbols

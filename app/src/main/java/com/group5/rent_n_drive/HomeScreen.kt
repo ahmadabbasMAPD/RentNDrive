@@ -43,6 +43,10 @@ import coil.compose.rememberImagePainter
 import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import kotlinx.coroutines.launch
 
+/*
+* Made by Ahmad Abbas, Rahul Edirisinghe, Calist Dsouza, Saurav Gautam for MAPD721 Project.
+* Class notes, and Other references and online resources used to help write code given below.
+* */
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
@@ -69,12 +73,6 @@ fun HomeScreen(navController: NavController) {
                 backgroundColor = MaterialTheme.colors.primary,
                 contentColor = Color.White,
                 elevation = 4.dp,
-                /* search left to implement*/
-//                actions = {
-//                    IconButton(onClick = { /* Implement search functionality here */ }) {
-//                        Icon(Icons.Default.Search, contentDescription = "Search")
-//                    }
-//                }
             )
         },
         content = {

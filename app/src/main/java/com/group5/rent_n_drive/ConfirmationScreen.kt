@@ -30,6 +30,11 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.group5.rent_n_drive.datastore.UserBookingDatastore
 
+/*
+* Made by Ahmad Abbas, Rahul Edirisinghe, Calist Dsouza, Saurav Gautam for MAPD721 Project.
+* Class notes, and Other references and online resources used to help write code given below.
+* */
+
 //REFERENCES AND SOURCES:
 // Class Example Notification Code
 // Video: https://www.youtube.com/watch?v=LP623htmWcI
