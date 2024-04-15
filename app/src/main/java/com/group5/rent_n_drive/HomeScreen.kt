@@ -49,6 +49,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen(navController: NavController) {
     val appScope = rememberCoroutineScope()
     val categories = listOf("Compact", "Sport", "Sedan", "SUV")
+    val categoryPrices = listOf(1500, 4500, 2500, 3000)
     val carsByCategory = categories.map { category ->
         cars.filter { it.type == category }
     }
@@ -56,8 +57,9 @@ fun HomeScreen(navController: NavController) {
     val userName = userDatastoreRef.getUserName.collectAsState(initial = "")
     val startDate = userDatastoreRef.getCarStartDate.collectAsState(initial = "")
     val endDate = userDatastoreRef.getCarEndDate.collectAsState(initial = "")
-    val carId = userDatastoreRef.getCarId.collectAsState(initial = "")
+    val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
     val prevUser = userDatastoreRef.getPreviousUser.collectAsState(initial = "")
+    val price = userDatastoreRef.getCarPrice.collectAsState(initial = 0)
     val isBooked = userDatastoreRef.getIsBookingMade.collectAsState(initial = false)
 
     Scaffold(
@@ -87,7 +89,7 @@ fun HomeScreen(navController: NavController) {
                     val bookedCar = cars.find { it.id == carId.value }
                     if(bookedCar != null && prevUser.value!! == userName.value!!) {
                         Text(
-                            text = "Current Booking: ${bookedCar.name} from ${startDate.value} to ${endDate.value}",
+                            text = "Current Booking: ${bookedCar.name} from ${startDate.value} to ${endDate.value} for $ ${price.value}.00",
                             modifier = Modifier.padding(top = 16.dp),
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center
@@ -114,7 +116,7 @@ fun HomeScreen(navController: NavController) {
                 ) {
                     categories.forEachIndexed { index, category ->
                         Spacer(modifier = Modifier.height(5.dp))
-                        CategoryHeader(category)
+                        CategoryHeader("$category - $ ${categoryPrices[index]}.00")
                         LazyRow(
                             modifier = Modifier.padding(top = 8.dp, bottom = 16.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -123,7 +125,7 @@ fun HomeScreen(navController: NavController) {
                             items(carsByCategory[index]) { car ->
                                 CarCard(car = car, onCarClick = { selectedCar ->
                                     appScope.launch {
-                                        userDatastoreRef.saveCarInformation(selectedCar.id)
+                                        userDatastoreRef.saveCarInformation(selectedCar.id, categoryPrices[index])
                                     }
                                     navController.navigate("booking")
                                 })

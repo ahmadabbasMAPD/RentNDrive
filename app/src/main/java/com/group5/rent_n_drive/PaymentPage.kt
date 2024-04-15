@@ -31,8 +31,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import com.group5.rent_n_drive.datastore.UserBookingDatastore
 import kotlinx.coroutines.launch
@@ -49,10 +52,11 @@ fun PaymentPage(navCon: NavController) {
     val appScope = rememberCoroutineScope()
     val userDatastoreRef = UserBookingDatastore(LocalContext.current)
     val userName = userDatastoreRef.getUserName.collectAsState(initial = "")
+    val price = userDatastoreRef.getCarPrice.collectAsState(initial = "")
 
     // Validation functions
-    val isCardNumberValid = cardNumber.length == 16
-    val isCvvValid = cvv.length in 3..4
+    val isCardNumberValid = (cardNumber.length == 16 && cardNumber.isDigitsOnly())
+    val isCvvValid = ((cvv.length in 3..4) && cvv.isDigitsOnly())
     val isExpiryDateValid = try {
         val parts = expiryDate.split("/")
         val month = parts[0].toInt()
@@ -76,6 +80,8 @@ fun PaymentPage(navCon: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(15.dp))
+        Text(text = "Payment of $ ${price.value}.00", fontWeight = FontWeight.Bold, fontSize = 40.sp)
         Spacer(modifier = Modifier.height(30.dp))
         OutlinedTextField(
             modifier = Modifier
@@ -164,5 +170,3 @@ fun PaymentPage(navCon: NavController) {
         }
     }
 }
-
-

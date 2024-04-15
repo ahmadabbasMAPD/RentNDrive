@@ -18,6 +18,7 @@ class UserBookingDatastore(private val context: Context) {
         val previousUserName_Key = stringPreferencesKey("PREVUSER")
         val userUserName_KEY = stringPreferencesKey("USERNAME")
         val carId_Key = intPreferencesKey("CARNAME")
+        val carPrice_Key = intPreferencesKey("PRICE")
         val carStartDate_KEY = stringPreferencesKey("STARTDATE")
         val carEndDate_KEY = stringPreferencesKey("ENDDATE")
         val isBookingMade_KEY = booleanPreferencesKey("ISBOOKINGMADE")
@@ -53,9 +54,13 @@ class UserBookingDatastore(private val context: Context) {
             preferences[isBookingMade_KEY] ?: false
         }
 
-    suspend fun saveUserInformation(userPassword: String, userName: String){
+    val getCarPrice: Flow<Int?> = context.dataStore.data
+        .map { preferences ->
+            preferences[carPrice_Key] ?: 0
+        }
+
+    suspend fun saveUserInformation(userName: String){
         context.dataStore.edit { preferences ->
-//          preferences[previousUserName_Key] = userPassword
             if (preferences[previousUserName_Key] == ""){
                 preferences[previousUserName_Key] = userName
             }
@@ -69,9 +74,10 @@ class UserBookingDatastore(private val context: Context) {
         }
     }
 
-    suspend fun saveCarInformation(carId: Int){
+    suspend fun saveCarInformation(carId: Int, carPrice: Int){
         context.dataStore.edit { preferences ->
             preferences[carId_Key] = carId
+            preferences[carPrice_Key] = carPrice
         }
     }
     suspend fun saveBookingInformation(startDate: String, endDate: String){
@@ -87,6 +93,7 @@ class UserBookingDatastore(private val context: Context) {
             preferences[carStartDate_KEY] = ""
             preferences[carEndDate_KEY] = ""
             preferences[isBookingMade_KEY] = false
+            preferences[carPrice_Key] = 0
         }
     }
 }

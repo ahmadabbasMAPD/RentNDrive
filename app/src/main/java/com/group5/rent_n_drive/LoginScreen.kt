@@ -106,7 +106,7 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            appScope.launch {  userDatastoreRef.saveUserInformation(password, username) }
+            appScope.launch {  userDatastoreRef.saveUserInformation(username) }
             onLogin(username, password)
         }) {
             Text("Login")
