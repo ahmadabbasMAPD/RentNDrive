@@ -96,20 +96,17 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavigator() {
     val navController = rememberNavController()
-    NavHost(navController, startDestination = "login") {
-        composable("login") {
+    NavHost(navController, startDestination = "login") {//Set up Navigation with Login as "Splash page"
+        composable("login") {//Rest of pages given below
             LoginScreen(onLogin = { username, password ->if (username.trim() != "" && password.trim() != "") {
-            navController.navigate("home")
-        } else {
-            // Show error message
-
-        } }) }
+            navController.navigate("home")//make sure iusername and password is not empty
+        }}) }
         composable("home") { HomeScreen(navController = navController) }
 
         composable("confirmation") {
             val userDatastoreRef = UserBookingDatastore(LocalContext.current)//(context)
             val carId = userDatastoreRef.getCarId.collectAsState(initial = 0)
-            val car = cars.find { it.id == carId.value }
+            val car = cars.find { it.id == carId.value }//Double Check if car exits
             if (car != null) ConfirmationScreen(car = car, navCon = navController)
         }
         composable("booking") {
@@ -122,7 +119,7 @@ fun AppNavigator() {
             PaymentPage(navCon = navController)
         }
 
-        composable("loading/{destination}"){backStackEntry ->
+        composable("loading/{destination}"){backStackEntry ->//get value form path to fetch next destination
             val destination = backStackEntry.arguments?.getString("destination")
             if(destination != null) LoadingScreen(navCon = navController, destination = destination)
         }

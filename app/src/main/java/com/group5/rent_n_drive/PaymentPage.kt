@@ -134,7 +134,7 @@ fun PaymentPage(navCon: NavController) {
                     color = Color.Blue
                 )
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
         if (showErrors && !isExpiryDateValid) {
             Text("Expiry date should be in MM/YY format and valid", color = Color.Red)
